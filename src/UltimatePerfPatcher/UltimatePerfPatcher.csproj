@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- .NET Framework 4.8 ships with Windows 10/11, so the patcher runs without installing anything. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Version>1.0.0</Version>
+    <!-- no PDB path (would contain the builder's user folder) in the published binary -->
+    <DebugType>none</DebugType>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=.</PathMap>
+    <Product>UltimatePerfPatcher</Product>
+    <Description>Unofficial performance patcher for 8BitDo Ultimate Software V2</Description>
+    <AdvancePerfDll>..\AdvancePerf\bin\Release\net5.0-windows\AdvancePerf.dll</AdvancePerfDll>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="dnlib" Version="4.4.0" GeneratePathProperty="true" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- both are embedded so the patcher is a single file -->
+    <EmbeddedResource Include="$(AdvancePerfDll)" LogicalName="AdvancePerf.dll" />
+    <EmbeddedResource Include="$(Pkgdnlib)\lib\net45\dnlib.dll" LogicalName="dnlib.dll" />
+  </ItemGroup>
+  <Target Name="CheckAdvancePerf" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(AdvancePerfDll)')" Text="Build ..\AdvancePerf first: dotnet build -c Release ..\AdvancePerf" />
+  </Target>
+</Project>
