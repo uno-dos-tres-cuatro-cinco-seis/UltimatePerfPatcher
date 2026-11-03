@@ -50,7 +50,7 @@ Tested with app versions V1.19 and V1.35. Unknown versions are refused if the co
   failed flash can brick a controller and that path was not tested.
 - The patched EXE is not code-signed (the original signature cannot survive a modification), so
   SmartScreen may ask once.
-- The built-in auto-updater replaces the patched EXE with a new original; run the patcher again after updating.
+- The built-in auto-updater only updates the original EXE. The `(perf)` EXE stays on the old version, so run the patcher again after updating.
 - This repository contains no 8BitDo code or files. The patcher only modifies the copy you installed.
 
 ## Building
@@ -59,3 +59,4 @@ Tested with app versions V1.19 and V1.35. Unknown versions are refused if the co
 `src/AdvancePerf` holds the small helper methods the patched app calls, `src/UltimatePerfPatcher` the
 patcher (bundle reader/writer, IL patches via [dnlib](https://github.com/0xd4d/dnlib)).
 `measure/` contains the PowerShell scripts used for the measurements.
+`UltimatePerfPatcher.exe` embeds dnlib (MIT), see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
